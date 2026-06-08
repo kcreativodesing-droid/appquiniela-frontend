@@ -6,12 +6,11 @@ import { apiFetch, getToken } from './api';
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
+    .replace(/-/g, '+')
     .replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
-
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
@@ -19,66 +18,90 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 /**
- * Inicializa y registra la suscripción de notificaciones push para el usuario actual.
+ * Solicita permiso al navegador y registra la suscripción push en el backend.
+ * Llamar SOLO después de que el usuario haga click en "Activar notificaciones".
  */
 export async function inicializarPush() {
   if (typeof window === 'undefined') return;
 
-  // 1. Verificar soporte
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    console.warn('⚠️ Las notificaciones push no están soportadas en este navegador.');
+  // Verificar soporte del navegador
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
+    console.warn('⚠️ Push notifications no soportadas en este navegador.');
     return;
   }
 
-  // 2. Verificar que el usuario esté logueado
-  if (!getToken()) {
+  // Verificar que el usuario esté autenticado
+  if (!getToken()) return;
+
+  // Solicitar permiso del navegador (solo si aún no fue decidido)
+  let permission = Notification.permission;
+  if (permission === 'default') {
+    permission = await Notification.requestPermission();
+  }
+
+  if (permission !== 'granted') {
+    console.warn('⚠️ Permiso de notificaciones denegado.');
     return;
   }
 
   try {
-    // Esperar a que el service worker esté listo
+    // Esperar a que el service worker esté activo
     const registration = await navigator.serviceWorker.ready;
 
-    // 3. Obtener la clave pública VAPID desde el backend
+    // Obtener clave pública VAPID desde el backend
     const { publicKey } = await apiFetch<{ publicKey: string }>('/api/notifications/vapid-key');
-    if (!publicKey) {
-      console.warn('⚠️ Clave pública VAPID no configurada en el servidor.');
+    if (!publicKey || publicKey === 'YOUR_PUBLIC_KEY') {
+      console.warn('⚠️ VAPID key pública no configurada en el servidor.');
       return;
     }
 
-    // 4. Solicitar permiso de notificaciones si no se ha otorgado
-    let permission = Notification.permission;
-    if (permission === 'default') {
-      permission = await Notification.requestPermission();
-    }
-
-    if (permission !== 'granted') {
-      console.warn('⚠️ Permiso de notificaciones denegado por el usuario.');
-      return;
-    }
-
-    // 5. Comprobar si ya existe una suscripción activa
+    // Verificar si ya hay una suscripción activa
     let subscription = await registration.pushManager.getSubscription();
 
     if (!subscription) {
-      // Registrar nueva suscripción
-      const subscribeOptions = {
+      subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicKey),
-      };
-
-      subscription = await registration.pushManager.subscribe(subscribeOptions);
-      console.log('🚀 Nueva suscripción Push generada con éxito');
+      });
+      console.log('🚀 Nueva suscripción Push registrada');
     }
 
-    // Enviar/Actualizar suscripción en el backend
+    // Sincronizar suscripción con el backend (igual que toqui.app: enviar endpoint + keys + userAgent)
+    const subJson = subscription.toJSON();
     await apiFetch('/api/notifications/subscribe', {
       method: 'POST',
-      body: JSON.stringify(subscription),
+      body: JSON.stringify({
+        endpoint: subJson.endpoint,
+        keys: {
+          p256dh: subJson.keys?.p256dh || '',
+          auth: subJson.keys?.auth || '',
+        },
+        userAgent: navigator.userAgent,
+      }),
     });
 
     console.log('✅ Suscripción Push sincronizada con el servidor');
   } catch (error: any) {
     console.error('❌ Error al inicializar notificaciones push:', error.message || error);
   }
+}
+
+/**
+ * Registra silenciosamente la suscripción push si el permiso ya fue concedido.
+ * Llamar en cada carga de página para mantener la suscripción activa.
+ */
+export async function sincronizarPushSilencioso() {
+  if (typeof window === 'undefined') return;
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  if (!getToken()) return;
+  if (Notification.permission !== 'granted') return;
+
+  // Ejecutar sin bloquear el render
+  setTimeout(async () => {
+    try {
+      await inicializarPush();
+    } catch {
+      // Fallo silencioso — no interrumpir la app
+    }
+  }, 0);
 }
