@@ -22,6 +22,17 @@ export default function BottomNav() {
     }
   }, [pathname]);
 
+  useEffect(() => {
+    const user = getUser();
+    if (user) {
+      import('@/lib/push').then(({ inicializarPush }) => {
+        inicializarPush();
+      }).catch((err) => {
+        console.error('Error importing push services:', err);
+      });
+    }
+  }, [pathname]);
+
   const activeNavItems = isAdmin
     ? [...navItems, { href: '/admin', icon: '⚙️', label: 'Admin' }]
     : navItems;
