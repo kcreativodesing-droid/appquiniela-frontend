@@ -1,0 +1,353 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   QUINIELA MUNDIAL 2026 — Neo-Tactile Design System
+   Glassmorphism + Deep Navy + Cyan Accents
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --accent: 190 100% 60%;         /* Cyan principal */
+  --accent-glow: 190 100% 50%;
+  --accent-secondary: 220 90% 60%; /* Azul secundario */
+  --surface: 222 47% 11%;
+  --surface-raised: 222 47% 14%;
+  --surface-glass: rgba(15, 23, 42, 0.6);
+  --border-glass: rgba(100, 160, 255, 0.08);
+  --border-glow: rgba(56, 189, 248, 0.25);
+  --gold: 45 100% 60%;
+  --success: 160 84% 39%;
+  --danger: 0 84% 60%;
+  --warning: 38 92% 50%;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: linear-gradient(160deg, #050a18 0%, #0a1628 35%, #0d1f3c 65%, #091428 100%);
+  color: white;
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* Fondo de partículas sutiles via pseudo-elemento */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(56, 189, 248, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 80% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 50% 50%, rgba(56, 189, 248, 0.02) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.15); border-radius: 999px; }
+
+/* ── Safe areas (iPhone Notch) ─────────────────────────── */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem); }
+
+/* ══════════════════════════════════════════════════════════
+   GLASS CARD SYSTEM
+   ══════════════════════════════════════════════════════════ */
+.glass {
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid rgba(100, 160, 255, 0.08);
+  border-radius: 1rem;
+}
+
+.glass-strong {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(24px) saturate(1.5);
+  -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  border: 1px solid rgba(100, 160, 255, 0.12);
+  border-radius: 1.25rem;
+}
+
+.glass-accent {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.06));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 1rem;
+}
+
+.glass-glow {
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.05),
+    0 4px 24px -4px rgba(0, 0, 0, 0.4),
+    0 0 40px -12px rgba(56, 189, 248, 0.08);
+}
+
+.glass-glow-accent {
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.12),
+    0 4px 32px -4px rgba(0, 0, 0, 0.5),
+    0 0 60px -12px rgba(56, 189, 248, 0.12);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATIONS — lightweight, GPU-composited
+   ══════════════════════════════════════════════════════════ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px -6px rgba(56, 189, 248, 0.15); }
+  50%      { box-shadow: 0 0 30px -4px rgba(56, 189, 248, 0.3); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes countdownPulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.7; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in-delay-1 {
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+
+.animate-fade-in-delay-3 {
+  animation: fadeInUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.24s both;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-countdown {
+  animation: countdownPulse 1s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Stagger animations for lists */
+.stagger-item {
+  animation: fadeInUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BUTTON SYSTEM
+   ══════════════════════════════════════════════════════════ */
+.btn-primary {
+  background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-secondary)));
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px -4px rgba(56, 189, 248, 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 28px -4px rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: scale(0.97) translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(148, 163, 184, 0.9);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  color: white;
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.1);
+}
+
+/* ══════════════════════════════════════════════════════════
+   INPUT SYSTEM
+   ══════════════════════════════════════════════════════════ */
+.input-glass {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(100, 160, 255, 0.1);
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.25s ease;
+  outline: none;
+}
+.input-glass::placeholder {
+  color: rgba(148, 163, 184, 0.4);
+}
+.input-glass:focus {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08), 0 0 20px -4px rgba(56, 189, 248, 0.12);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* Score input específico */
+.input-score {
+  width: 3.25rem;
+  height: 3.25rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px solid rgba(100, 160, 255, 0.12);
+  border-radius: 0.75rem;
+  text-align: center;
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  outline: none;
+  transition: all 0.25s ease;
+}
+.input-score:focus {
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1), 0 0 24px -6px rgba(56, 189, 248, 0.15);
+  background: rgba(15, 23, 42, 0.85);
+}
+.input-score:disabled {
+  opacity: 0.35;
+}
+
+/* ══════════════════════════════════════════════════════════
+   BADGE SYSTEM
+   ══════════════════════════════════════════════════════════ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+.badge-pending {
+  background: rgba(250, 204, 21, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(250, 204, 21, 0.15);
+}
+.badge-live {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.badge-done {
+  background: rgba(52, 211, 153, 0.1);
+  color: #6ee7b7;
+  border: 1px solid rgba(52, 211, 153, 0.15);
+}
+
+/* ══════════════════════════════════════════════════════════
+   TAB SYSTEM
+   ══════════════════════════════════════════════════════════ */
+.tab-pill {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  color: rgba(148, 163, 184, 0.7);
+  background: transparent;
+}
+.tab-pill:hover {
+  color: white;
+  background: rgba(56, 189, 248, 0.06);
+}
+.tab-pill-active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.12));
+  color: #7dd3fc;
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 16px -4px rgba(56, 189, 248, 0.15);
+}
+
+/* ══════════════════════════════════════════════════════════
+   UTILITIES
+   ══════════════════════════════════════════════════════════ */
+
+/* Text gradient (for headings) */
+.text-gradient {
+  background: linear-gradient(135deg, #7dd3fc, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow line decorator */
+.glow-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.3) 50%, transparent 100%);
+}
+
+/* Remove input number arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] { -moz-appearance: textfield; }
+
+/* Scrollbar hide for tab rows */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
