@@ -45,7 +45,11 @@ export default function LoginPage() {
       {/* Logo area */}
       <div className="mb-10 text-center">
         <div className="flex justify-center mb-4">
-          <img src="/icons/icon.svg" alt="Logo Quiniela" className="w-16 h-16 animate-float" />
+          <img
+            src="/icons/icon_Balon icon .svg"
+            alt="Balón"
+            className="w-20 h-20 animate-float"
+          />
         </div>
         <h1 className="text-3xl font-extrabold text-gradient tracking-tight">Quiniela GGTIC</h1>
         <p className="text-slate-500 text-sm mt-1.5 font-medium tracking-widest uppercase">Mundial FIFA 2026</p>
