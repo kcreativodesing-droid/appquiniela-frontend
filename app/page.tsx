@@ -44,8 +44,10 @@ export default function LoginPage() {
     <div className="min-h-dvh flex flex-col items-center justify-center p-6 animate-fade-in">
       {/* Logo area */}
       <div className="mb-10 text-center">
-        <div className="text-6xl mb-4 animate-float">⚽</div>
-        <h1 className="text-3xl font-extrabold text-gradient tracking-tight">Quiniela</h1>
+        <div className="flex justify-center mb-4">
+          <img src="/icons/icon.svg" alt="Logo Quiniela" className="w-16 h-16 animate-float" />
+        </div>
+        <h1 className="text-3xl font-extrabold text-gradient tracking-tight">Quiniela GGTIC</h1>
         <p className="text-slate-500 text-sm mt-1.5 font-medium tracking-widest uppercase">Mundial FIFA 2026</p>
       </div>
 
@@ -57,11 +59,10 @@ export default function LoginPage() {
             <button
               key={m}
               onClick={() => { setModo(m); setError(''); }}
-              className={`flex-1 py-2.5 rounded-[0.6rem] text-sm font-semibold transition-all duration-300 ${
-                modo === m
+              className={`flex-1 py-2.5 rounded-[0.6rem] text-sm font-semibold transition-all duration-300 ${modo === m
                   ? 'btn-primary !p-0 !py-2.5 shadow-lg'
                   : 'text-slate-400 hover:text-white'
-              }`}
+                }`}
             >
               {m === 'login' ? 'Iniciar Sesión' : 'Registrarse'}
             </button>
