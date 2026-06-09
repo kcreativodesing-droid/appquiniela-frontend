@@ -45,12 +45,11 @@ function PartidoRow({
       {/* Header del partido */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className={`badge ${
-            partido.estado === 'Finalizado' ? 'badge-done' :
-            partido.estado === 'En Juego' ? 'badge-live' : 'badge-pending'
-          }`}>
+          <span className={`badge ${partido.estado === 'Finalizado' ? 'badge-done' :
+              partido.estado === 'En Juego' ? 'badge-live' : 'badge-pending'
+            }`}>
             {partido.estado === 'Finalizado' ? '✅ Final' :
-             partido.estado === 'En Juego' ? '🔴 En Vivo' : '🕐 Pendiente'}
+              partido.estado === 'En Juego' ? '🔴 En Vivo' : '🕐 Pendiente'}
           </span>
           {partido.grupo && (
             <span className="text-[10px] text-slate-600 font-semibold">Gr. {partido.grupo}</span>
@@ -132,15 +131,14 @@ function PartidoRow({
       <div className="flex items-center justify-between mt-3">
         {/* Puntos ganados */}
         {partido.estado === 'Finalizado' && prediccion && (
-          <span className={`badge ${
-            prediccion.puntosObtenidos === 3 ? 'badge-pending' :
-            prediccion.puntosObtenidos === 1 ? 'badge-done' :
-            'badge-live'
-          }`}>
+          <span className={`badge ${prediccion.puntosObtenidos === 3 ? 'badge-pending' :
+              prediccion.puntosObtenidos === 1 ? 'badge-done' :
+                'badge-live'
+            }`}>
             {prediccion.puntosObtenidos === 3 ? '🎯 +3 pts Exacto' :
-             prediccion.puntosObtenidos === 1 ? '✅ +1 pt Parcial' :
-             prediccion.puntosObtenidos === 0 ? '❌ 0 pts' :
-             '⏳ Sin calcular'}
+              prediccion.puntosObtenidos === 1 ? '✅ +1 pt Parcial' :
+                prediccion.puntosObtenidos === 0 ? '❌ 0 pts' :
+                  '⏳ Sin calcular'}
           </span>
         )}
         {!prediccion && partido.estado === 'Finalizado' && (
@@ -153,13 +151,12 @@ function PartidoRow({
           <button
             onClick={handleSave}
             disabled={saving || gl === '' || gv === ''}
-            className={`text-xs font-bold px-4 py-2 rounded-lg transition-all duration-200 active:scale-95 ${
-              saved
+            className={`text-xs font-bold px-4 py-2 rounded-lg transition-all duration-200 active:scale-95 ${saved
                 ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
                 : saving
-                ? 'glass text-slate-400'
-                : 'btn-primary !text-xs !px-4 !py-2'
-            }`}
+                  ? 'glass text-slate-400'
+                  : 'btn-primary !text-xs !px-4 !py-2'
+              }`}
           >
             {saved ? '✓ Guardado' : saving ? '...' : 'Guardar'}
           </button>
@@ -223,7 +220,7 @@ export default function QuinielaPage() {
     <div className="p-4 animate-fade-in">
       {/* Header */}
       <div className="pt-6 mb-5">
-        <h1 className="text-xl font-bold text-white">Mi Quiniela <span className="text-gradient">🎯</span></h1>
+        <h1 className="text-xl font-bold text-white">Mi Quiniela 🎯</h1>
         <p className="text-slate-500 text-sm mt-1 font-medium">
           {conPrediccion}/{partidos.length} predicciones · {pendientes} pendientes
         </p>
