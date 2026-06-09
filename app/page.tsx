@@ -64,8 +64,8 @@ export default function LoginPage() {
               key={m}
               onClick={() => { setModo(m); setError(''); }}
               className={`flex-1 py-2.5 rounded-[0.6rem] text-sm font-semibold transition-all duration-300 ${modo === m
-                  ? 'btn-primary !p-0 !py-2.5 shadow-lg'
-                  : 'text-slate-400 hover:text-white'
+                ? 'btn-primary !p-0 !py-2.5 shadow-lg'
+                : 'text-slate-400 hover:text-white'
                 }`}
             >
               {m === 'login' ? 'Iniciar Sesión' : 'Registrarse'}
@@ -167,7 +167,6 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <p className="text-slate-700 text-xs mt-8 font-medium tracking-wider">⚽ Mundial FIFA 2026</p>
     </div>
   );
 }
