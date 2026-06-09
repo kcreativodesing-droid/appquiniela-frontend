@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     title: 'Quiniela 2026',
   },
   icons: {
+    icon: '/icons/icon_Balon icon .svg',
     apple: '/icons/icon-192x192.png',
   },
 };
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="es" className="dark">
       <head>
         <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icons/icon_Balon icon .svg" type="image/svg+xml" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="mobile-web-app-capable" content="yes" />
