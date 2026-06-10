@@ -22,9 +22,10 @@ function PartidoRow({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const yaPredicho = !!prediccion;
   const abierto = partido.estado === 'Pendiente';
   const deadline = new Date(partido.fechaHora).getTime() - 5 * 60 * 1000;
-  const puedeEditar = abierto && Date.now() < deadline;
+  const puedeEditar = abierto && Date.now() < deadline && !yaPredicho;
 
   const handleSave = async () => {
     if (!puedeEditar || gl === '' || gv === '') return;
