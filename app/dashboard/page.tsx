@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { partidosApi, getUser, getToken, removeToken, type Partido } from '@/lib/api';
 import { getFlagUrl } from '@/lib/flags';
+import { formatHora, formatFechaLarga, fechaLocalCaracas, hoyCaracas } from '@/lib/date';
 
 function useCountdown(targetDate: string) {
   const [timeLeft, setTimeLeft] = useState('');
@@ -31,7 +32,6 @@ function useCountdown(targetDate: string) {
 }
 
 function PartidoCard({ partido, index }: { partido: Partido; index: number }) {
-  const fecha = new Date(partido.fechaHora);
 
   return (
     <div
@@ -47,7 +47,7 @@ function PartidoCard({ partido, index }: { partido: Partido; index: number }) {
            partido.estado === 'En Juego' ? '🔴 En Vivo' : '🕐 Pendiente'}
         </span>
         <span className="text-xs text-slate-500 font-medium">
-          {fecha.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}
+          {formatHora(partido.fechaHora)}
         </span>
       </div>
       <div className="flex items-center justify-between">
@@ -115,7 +115,7 @@ function ProximoPartido({ partido, tienePrediccion }: { partido: Partido; tieneP
         </div>
       </div>
       <p className="text-xs text-slate-500 text-center mb-4 font-medium">
-        {new Date(partido.fechaHora).toLocaleDateString('es', { weekday: 'long', day: 'numeric', month: 'long' })}
+        {formatFechaLarga(partido.fechaHora)}
         {partido.fase && ` · ${partido.fase}`}
       </p>
       {!tienePrediccion ? (
@@ -150,10 +150,9 @@ export default function DashboardPage() {
 
       setProximo(proxData);
 
-      const hoy = new Date();
-      const todayStr = hoy.toDateString();
+      const todayStr = hoyCaracas();
       const hoyPartidos = todos.filter(
-        (p) => new Date(p.fechaHora).toDateString() === todayStr
+        (p) => fechaLocalCaracas(p.fechaHora) === todayStr
       );
       setPartidosHoy(hoyPartidos);
     } catch {
@@ -211,9 +210,47 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Reglas de Puntuación */}
+      <div className="glass glass-glow p-5 mb-6 animate-fade-in-delay-2">
+        <h2 className="text-xs font-bold uppercase tracking-[0.2em] mb-4 text-sky-400">
+          📊 Reglas de Puntuación
+        </h2>
+        <div className="space-y-3.5">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-sky-500/10 text-sky-400 text-sm font-bold shrink-0">
+              3
+            </span>
+            <div>
+              <p className="text-xs font-bold text-white uppercase tracking-wider">Marcador Exacto</p>
+              <p className="text-[11px] text-slate-400 font-medium">Acertar los goles exactos de ambos equipos.</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500/10 text-emerald-400 text-sm font-bold shrink-0">
+              1
+            </span>
+            <div>
+              <p className="text-xs font-bold text-white uppercase tracking-wider">Ganador o Empate</p>
+              <p className="text-[11px] text-slate-400 font-medium">Acertar el resultado parcial (sin los goles exactos).</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="flex items-center justify-center w-7 h-7 rounded-full bg-rose-500/10 text-rose-400 text-sm font-bold shrink-0">
+              0
+            </span>
+            <div>
+              <p className="text-xs font-bold text-white uppercase tracking-wider">Fallo</p>
+              <p className="text-[11px] text-slate-400 font-medium">No acertar el ganador ni el empate.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Partidos de hoy */}
       {partidosHoy.length > 0 && (
-        <div className="animate-fade-in-delay-2">
+        <div className="animate-fade-in-delay-2 mb-6">
           <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.15em] mb-3">
             Partidos de Hoy
           </h2>
@@ -226,8 +263,8 @@ export default function DashboardPage() {
       )}
 
       {/* Cerrar sesión */}
-      <div className="mt-8 text-center animate-fade-in-delay-3">
-        <button onClick={handleLogout} className="btn-ghost text-xs">
+      <div className="mt-12 mb-6 text-center animate-fade-in-delay-3">
+        <button onClick={handleLogout} className="btn-ghost text-xs tracking-wider uppercase opacity-60 hover:opacity-100">
           Cerrar Sesión
         </button>
       </div>

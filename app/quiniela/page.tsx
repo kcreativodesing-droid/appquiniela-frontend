@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { partidosApi, prediccionesApi, getToken, type Partido, type Prediccion } from '@/lib/api';
 import { getFlagUrl } from '@/lib/flags';
+import { formatFechaCorta, formatHora } from '@/lib/date';
 
 function PartidoRow({
   partido,
@@ -56,9 +57,9 @@ function PartidoRow({
           )}
         </div>
         <span className="text-xs text-slate-500 font-medium">
-          {new Date(partido.fechaHora).toLocaleDateString('es', { day: 'numeric', month: 'short' })}
+          {formatFechaCorta(partido.fechaHora)}
           {' · '}
-          {new Date(partido.fechaHora).toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}
+          {formatHora(partido.fechaHora)}
         </span>
       </div>
 

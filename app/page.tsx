@@ -51,7 +51,7 @@ export default function LoginPage() {
             className="w-20 h-20 animate-float"
           />
         </div>
-        <h1 className="text-3xl font-extrabold text-gradient tracking-tight">Quiniela GGTIC</h1>
+        <h1 className="text-3xl font-extrabold text-gradient tracking-tight">QUINIELA</h1>
         <p className="text-slate-500 text-sm mt-1.5 font-medium tracking-widest uppercase">Mundial FIFA 2026</p>
       </div>
 
